@@ -1,0 +1,11 @@
+  GNU nano 7.2                                                ios_ping.yaml                                                          ---
+- name: Run IOS command
+  hosts: switch
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+    - name: Run "show ip interface brief"
+      cisco.ios.ios_command:
+        commands:
+          - show ip interface brief
