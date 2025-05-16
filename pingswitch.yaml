@@ -1,6 +1,6 @@
 ---
 - name: Ping from a Cisco IOS switch to another IP
-  hosts: switch
+  hosts: all
   gather_facts: no
   connection: network_cli
 
