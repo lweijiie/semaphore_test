@@ -1,0 +1,11 @@
+---
+- name: Ping from a Cisco IOS switch to another IP
+  hosts: switch
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+    - name: Ping a remote IP from the switch
+      cisco.ios.ios_ping:
+        dest: 8.8.8.8
+        count: 5
