@@ -1,0 +1,10 @@
+---
+- name: Back up Cisco IOS config
+  hosts: switch
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+    - name: Back up running configuration to local file
+      cisco.ios.ios_config:
+        backup: yes
