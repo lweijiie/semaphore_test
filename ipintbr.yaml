@@ -1,4 +1,4 @@
-  GNU nano 7.2                                                ios_ping.yaml                                                          ---
+---
 - name: Run IOS command
   hosts: switch
   gather_facts: no
