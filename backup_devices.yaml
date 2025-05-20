@@ -1,6 +1,6 @@
 ---
 - name: Backup network configs
-  hosts: "{{ target_group }}"
+  hosts: all
   gather_facts: no
   connection: network_cli
 
