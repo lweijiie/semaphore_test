@@ -1,0 +1,38 @@
+---
+- name: Backup network configs
+  hosts: "{{ target_group }}"
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+    - name: Determine backup command per vendor
+      set_fact:
+        backup_command: >-
+          {% if ansible_network_os == 'cisco.ios.ios' %}
+            show running-config
+          {% elif ansible_network_os == 'aruba.aoscx' %}
+            show running-config
+          {% elif ansible_network_os == 'h3c.advanced' %}
+            display current-configuration
+          {% else %}
+            unsupported
+          {% endif %}
+
+    - name: Fail if unsupported vendor
+      fail:
+        msg: "Unsupported network OS: {{ ansible_network_os }}"
+      when: backup_command == 'unsupported'
+
+    - name: Run backup command on device
+      ansible.netcommon.cli_command:
+        command: "{{ backup_command }}"
+      register: backup_output
+
+    - name: Save config to file locally
+      copy:
+        content: "{{ backup_output.stdout_lines | join('\n') }}"
+        dest: "backups/{{ inventory_hostname }}_{{ ansible_network_os }}.cfg"
+
+    - name: Confirm backup
+      debug:
+        msg: "Backup saved for {{ inventory_hostname }}"
